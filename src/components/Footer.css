@@ -1,0 +1,67 @@
+/* Ogólne stylowanie stopki */
+.footer {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Górna część stopki */
+.footer-top {
+  background-color: #34495e;
+  padding: 20px 0;
+  text-align: center;
+  color: #fff;
+}
+
+.footer-top .footer-logo {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+/* Dolna część stopki */
+.footer-bottom {
+  background-color: #fff;
+  padding: 20px 0;
+  text-align: center;
+  color: #666;
+}
+
+.footer-bottom p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+
+.footer-links a {
+  color: #0073e6;
+  margin: 0 10px;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+/* Przycisk przewijania na górę */
+.scroll-to-top {
+  background-color: #ddd;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 1.2em;
+  color: #333;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.scroll-to-top:hover {
+  background-color: #bbb;
+}
