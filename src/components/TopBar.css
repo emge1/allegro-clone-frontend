@@ -1,0 +1,137 @@
+/* Główna sekcja nagłówka */
+.header {
+  width: 100%;
+  background-color: white;
+  border-bottom: 1px solid #ddd; /* Cienka linia pod TopBar */
+}
+
+/* Górny pasek z logo, wyszukiwarką i loginem */
+.top-bar {
+  display: flex;
+  justify-content: space-between; /* Logo po lewej, wyszukiwarka po środku, login po prawej */
+  align-items: center;
+  padding: 10px 20px;
+}
+
+/* Logo po lewej stronie */
+.logo {
+  font-size: 30px;
+  color: #ff6600; /* Pomarańczowy kolor */
+  font-weight: bold;
+  text-decoration: none; /* Usunięcie podkreślenia */
+  display: block; /* Ustawienie logo jako bloku */
+  width: 250px; /* Ograniczona szerokość logo */
+  text-align: left; /* Wyrównanie tekstu do lewej */
+  white-space: nowrap; /* Zapobiega zawijaniu tekstu */
+}
+
+/* Pasek wyszukiwania */
+.search-section {
+  display: flex;
+  align-items: center;
+  flex: 2; /* Więcej przestrzeni dla sekcji wyszukiwania */
+  justify-content: center; /* Wyśrodkowanie sekcji wyszukiwania */
+}
+
+.search-input {
+  width: 600px; /* Szerokość pola wyszukiwania */
+  height: 35px; /* Wysokość pola wyszukiwania */
+  padding: 5px 10px; /* Wewnętrzne odstępy */
+  border: 1px solid #ddd; /* Obrys */
+  border-radius: 4px; /* Zaokrąglenie rogów */
+  font-size: 14px; /* Rozmiar tekstu wewnątrz pola */
+}
+
+.search-button {
+  height: 35px; /* Wysokość przycisku równa polu wyszukiwania */
+  padding: 0 15px; /* Odstępy wewnętrzne */
+  border: none;
+  background-color: #ff6600; /* Pomarańczowy kolor przycisku */
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px; /* Dopasowane zaokrąglenie */
+  margin-left: 10px; /* Odstęp między polem a przyciskiem */
+}
+
+/* Dropdown "All categories" */
+.categories-dropdown {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 200px; /* Szerokość dropdown */
+  margin: 0 auto; /* Wyśrodkowanie w kontenerze */
+  font-size: 14px; /* Dopasowany rozmiar tekstu */
+}
+
+/* Sekcja użytkownika (Login, ikony) */
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Odstęp między ikonami */
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px; /* Rozmiar ikon */
+}
+
+/* Dropdown menu kontener */
+.dropdown {
+  position: relative;
+}
+
+.user-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+  padding: 5px 10px; /* Dodano odstępy wewnętrzne */
+  border-radius: 4px; /* Zaokrąglenie dla wyglądu */
+}
+
+.user-link:hover {
+  background-color: #f5f5f5;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 5px); /* Poniżej przycisku My Allegro z odstępem */
+  right: 0; /* Wyrównanie do prawej */
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  width: 200px; /* Szerokość dropdown */
+  z-index: 100;
+}
+
+/* Dropdown item */
+.dropdown-item {
+  display: block;
+  padding: 8px 10px;
+  color: black;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f5; /* Delikatne tło przy najechaniu */
+}
+
+/* Sekcja "All categories" pod TopBar */
+.categories-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0; /* Odstęp wewnętrzny */
+  background-color: white; /* Białe tło */
+  border-top: 1px solid #ddd; /* Cienka linia nad sekcją */
+  width: 100%; /* Pełna szerokość sekcji */
+}
