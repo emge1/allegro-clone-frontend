@@ -9,6 +9,10 @@ const TopBar = ({ isLoggedIn }) => {
     setDropdownVisible(!dropdownVisible);
   };
 
+  const closeDropdown = () => {
+      setDropdownVisible(false);
+    };
+
   return (
     <header className="header">
       <div className="top-bar">
@@ -32,22 +36,22 @@ const TopBar = ({ isLoggedIn }) => {
               <div className="dropdown-menu">
                 {isLoggedIn ? (
                   <>
-                    <Link to="/profile" className="dropdown-item">
+                    <Link to="/profile" className="dropdown-item" onClick={closeDropdown}>
                       My Profile
                     </Link>
-                    <Link to="/orders" className="dropdown-item">
+                    <Link to="/orders" className="dropdown-item" onClick={closeDropdown}>
                       My Orders
                     </Link>
-                    <Link to="/logout" className="dropdown-item">
+                    <Link to="/logout" className="dropdown-item" onClick={closeDropdown}>
                       Logout
                     </Link>
                   </>
                 ) : (
                   <>
-                    <Link to="/login" className="dropdown-item">
+                    <Link to="/login" className="dropdown-item" onClick={closeDropdown}>
                       Login
                     </Link>
-                    <Link to="/register" className="dropdown-item">
+                    <Link to="/register" className="dropdown-item" onClick={closeDropdown}>
                       Register
                     </Link>
                   </>
