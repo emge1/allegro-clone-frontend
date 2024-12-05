@@ -1,7 +1,9 @@
+/* Główna klasa aplikacji */
 .App {
   text-align: center;
 }
 
+/* Animacje logo */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -13,6 +15,7 @@
   }
 }
 
+/* Nagłówek aplikacji */
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -24,6 +27,7 @@
   color: white;
 }
 
+/* Linki w nagłówku */
 .App-link {
   color: #61dafb;
 }
@@ -35,4 +39,110 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Kontener aplikacji z Flexbox */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Główna zawartość strony */
+.main-content {
+  flex: 1; /* Rozciąga główną zawartość na pozostałą przestrzeń */
+}
+
+/* --- Nowe style dla TopBar i categories-bar --- */
+
+/* Nagłówek aplikacji */
+.header {
+  width: 100%;
+  background-color: white;
+  border-bottom: 1px solid #ddd; /* Cienka linia pod TopBar */
+  z-index: 10; /* Upewnij się, że nagłówek jest widoczny */
+  position: relative;
+}
+
+/* Górny pasek (logo, wyszukiwarka, login) */
+.top-bar {
+  display: flex;
+  justify-content: space-between; /* Logo po lewej, wyszukiwarka po środku, login po prawej */
+  align-items: center;
+  padding: 10px 20px;
+}
+
+/* Logo */
+.logo {
+  font-size: 24px;
+  color: #ff6600; /* Pomarańczowy kolor */
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* Pasek wyszukiwania */
+.search-section {
+  display: flex;
+  align-items: center;
+  flex: 2; /* Pasek wyszukiwania zajmuje większą przestrzeń */
+  justify-content: center;
+}
+
+.search-input {
+  width: 300px; /* Szerokość pola wyszukiwania */
+  padding: 5px;
+  margin-right: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.search-button {
+  padding: 5px 10px;
+  border: none;
+  background-color: #ff6600;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Sekcja użytkownika (Login, ikony) */
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Odstęp między ikonami */
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.user-link {
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Pasek kategorii pod główną sekcją */
+.categories-bar {
+  display: flex !important; /* Wymuszenie Flexbox */
+  justify-content: center !important; /* Wyrównanie poziome */
+  align-items: center !important; /* Wyrównanie pionowe */
+  width: 100% !important; /* Sekcja zajmuje pełną szerokość */
+  padding: 10px 0 !important; /* Odstęp wewnętrzny */
+  margin: 0 auto !important; /* Automatyczne wyrównanie */
+  background-color: white !important; /* Tło sekcji */
+  border-top: 1px solid #ddd !important; /* Cienka linia nad sekcją */
+  box-sizing: border-box; /* Upewnij się, że padding nie wpływa na szerokość */
+}
+
+
+/* Dropdown "All categories" */
+.categories-dropdown {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 200px; /* Szerokość dropdown */
 }
