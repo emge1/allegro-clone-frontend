@@ -7,7 +7,7 @@ const Home = () => {
   const [cheapProducts, setCheapProducts] = useState([]);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/products')
+    axios.get('http://localhost:8000/products')
       .then((response) => {
         const products = response.data;
 
