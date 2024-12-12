@@ -5,13 +5,14 @@ import './Home.css';
 const Home = () => {
   const [randomProducts, setRandomProducts] = useState([]);
   const [cheapProducts, setCheapProducts] = useState([]);
+  const BASE_URL = "http://localhost:8000";
 
   useEffect(() => {
-    axios.get('http://localhost:8000/products')
+    axios.get('http://127.0.0.1:8000/products')
       .then((response) => {
         const products = response.data;
 
-        const cheap = products.filter((product) => product.price <= 50);
+        const cheap = products.filter((product) => product.max_price <= 50);
 
         const random = [...products].sort(() => 0.5 - Math.random()).slice(0, 5);
 
@@ -24,13 +25,13 @@ const Home = () => {
   return (
     <div className="home">
       <section className="products-section">
-        <h2>Random Products</h2>
+        <h2>Best Sellers</h2>
         <div className="products-grid">
           {randomProducts.map((product) => (
             <div key={product.id} className="product-card">
-              <img src={product.image} alt={product.name} />
+              <img src={`${BASE_URL}${product.thumbnail}`} alt={product.name} />
               <h3>{product.name}</h3>
-              <p>{product.price} PLN</p>
+              <p>{product.max_price} PLN</p>
             </div>
           ))}
         </div>
@@ -41,9 +42,9 @@ const Home = () => {
         <div className="products-grid">
           {cheapProducts.map((product) => (
             <div key={product.id} className="product-card">
-              <img src={product.image} alt={product.name} />
+              <img src={`${BASE_URL}${product.thumbnail}`} alt={product.name} />
               <h3>{product.name}</h3>
-              <p>{product.price} PLN</p>
+              <p>{product.max_price} PLN</p>
             </div>
           ))}
         </div>
