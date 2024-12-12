@@ -1,0 +1,65 @@
+.register-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.register-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.account-type,
+.contact-type {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.login-data input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.login-data p {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.age-selection button {
+    margin-right: 10px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.age-selection button:hover {
+    background-color: #e0e0e0;
+}
+
+.agreements label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.register-button {
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #ff5a02;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.register-button:hover {
+    background-color: #ff5a02;
+}
