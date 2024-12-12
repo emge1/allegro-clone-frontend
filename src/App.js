@@ -6,6 +6,7 @@ import CategoryPage from './pages/CategoryPage';
 import Footer from './components/Footer';
 import TopBar from './components/TopBar';
 import LoginPage from './pages/Login';
+import RegisterPage from './pages/Register';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/product/:id" element={<ProductPage />} />
             <Route path="/category/:id" element={<CategoryPage />} />
+            <Route path="/register" element={<RegisterPage />} />
           </Routes>
         </div>
         <Footer />
