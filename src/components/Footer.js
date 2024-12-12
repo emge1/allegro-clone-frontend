@@ -11,14 +11,26 @@ function Footer() {
       <div className="footer-bottom">
         <p>Allegro Clone Serwices</p>
         <div className="footer-links">
-          <a>Allegro-Clone.cz</a>
-          <a>Allegro-Clone.sk</a>
-          <a>Allegro-Clone.hu</a>
-          <a>Allegro-Clone.sk</a>
-          <a>Allegro-Clone.hr</a>
-          <a>Allegro-Clone.com</a>
+            <a href="http://localhost:3000/" target="_blank" rel="noopener noreferrer">
+                Allegro-Clone.cz
+            </a>
+            <a href="http://localhost:3000/" target="_blank" rel="noopener noreferrer">
+                Allegro-Clone.sk
+            </a>
+            <a href="http://localhost:3000/" target="_blank" rel="noopener noreferrer">
+                Allegro-Clone.hu
+            </a>
+            <a href="http://localhost:3000/" target="_blank" rel="noopener noreferrer">
+                Allegro-Clone.sk
+            </a>
+            <a href="http://localhost:3000/" target="_blank" rel="noopener noreferrer">
+                Allegro-Clone.hr
+            </a>
+            <a href="http://localhost:3000/" target="_blank" rel="noopener noreferrer">
+                Allegro-Clone.com
+            </a>
         </div>
-        <button className="scroll-to-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>▲</button>
+          <button className="scroll-to-top" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>▲</button>
       </div>
     </footer>
   );
