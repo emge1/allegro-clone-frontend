@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './TopBar.css';
 
 const TopBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
+  const BASE_URL = "http://127.0.0.1:8000";
 
   useEffect(() => {
+    // Sprawdź token logowania
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
+
+    // Pobierz listę kategorii
+    axios
+        .get(`${BASE_URL}/categories/`)
+        .then((response) => setCategories(response.data))
+        .catch((error) => console.error('Failed to fetch categories', error));
   }, []);
 
   const toggleDropdown = () => {
@@ -23,6 +34,18 @@ const TopBar = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
     closeDropdown();
+  };
+
+  const handleCategoryChange = (event) => {
+    const categoryId = event.target.value;
+
+    // Jeśli wybrano "All categories", wracamy na stronę główną
+    if (categoryId === "all") {
+      navigate('/');
+    } else {
+      // Przekierowanie do strony wybranej kategorii
+      navigate(`/categories/${categoryId}`);
+    }
   };
 
   return (
@@ -73,12 +96,15 @@ const TopBar = () => {
             </div>
           </div>
         </div>
+
         <div className="categories-bar">
-          <select className="categories-dropdown">
-            <option>All categories</option>
-            <option>Electronics</option>
-            <option>Fashion</option>
-            <option>Home & Garden</option>
+          <select className="categories-dropdown" onChange={handleCategoryChange}>
+            <option value="all">All categories</option>
+            {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.title}
+                </option>
+            ))}
           </select>
         </div>
       </header>
