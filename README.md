@@ -7,6 +7,7 @@ Key functionalities include:
 * Models for core e-commerce elements like users, products, and orders.
 * Serializers and views for handling data and API endpoints.
 * Test coverage to ensure reliability.
+* GitHub Actions for automated CI workflows, including testing and building (backend part).
 * Support for both local development and production environments using Docker and docker-compose.
 
 While the frontend is under active development, the [backend](https://github.com/emge1/allegro-clone-api) is also being developed and provides a REST API to support the full e-commerce platform experience. The frontend will integrate seamlessly with the backend to deliver a dynamic and interactive user experience.
@@ -66,17 +67,23 @@ Access the application at http://127.0.0.1:3000/.
 
 # Dependencies
 ## Backend
+### Base
 * Django
 * Django Rest Framework
 * Python Decouple
 * Pillow
 * Django Cors Headers
+* Prometheus Client
+
+### Local
 * Django Debug Toolbar
 * Pytest
-* Pytest Dajngo
+* Pytest Django
 * Pytest Cov
 * Pytest JUnitXML
 * SQLite (local)
+
+### Production
 * Postgres (production)
 
 ## Frontend
@@ -98,3 +105,9 @@ To view a screenshot displaying all possible HTTP methods and endpoints for auth
 To view API documentation, run development server and visit http://127.0.0.1:8000/docs/
 
 ![Swagger docs, non-authenticated](media/docs.png)
+
+# Example screenshots
+
+![Example 1](media/example1.png)
+
+![Example 2](media/example2.png)
