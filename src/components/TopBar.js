@@ -11,11 +11,9 @@ const TopBar = () => {
   const BASE_URL = "http://127.0.0.1:8000";
 
   useEffect(() => {
-    // Sprawdź token logowania
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
 
-    // Pobierz listę kategorii
     axios
         .get(`${BASE_URL}/categories/`)
         .then((response) => setCategories(response.data))
@@ -30,20 +28,51 @@ const TopBar = () => {
     setDropdownVisible(false);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    setIsLoggedIn(false);
-    closeDropdown();
+  const handleClick = () => {
+    if (isLoggedIn) {
+      navigate('/cart/');
+    } else {
+      alert('You need to log in to access the cart.');
+    }
+  };
+
+  const handleLogout = async () => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      console.error("No token found in localStorage");
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:8000/logout/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        console.log("Logged out successfully.");
+      } else {
+        console.error("Logout failed. Server response:", response.status, await response.text());
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+    } finally {
+      localStorage.removeItem('token');
+      setIsLoggedIn(false);
+      closeDropdown();
+    }
   };
 
   const handleCategoryChange = (event) => {
     const categoryId = event.target.value;
 
-    // Jeśli wybrano "All categories", wracamy na stronę główną
     if (categoryId === "all") {
       navigate('/');
     } else {
-      // Przekierowanie do strony wybranej kategorii
       navigate(`/categories/${categoryId}`);
     }
   };
@@ -62,7 +91,9 @@ const TopBar = () => {
 
           <div className="user-section">
             <button className="icon-button">🔔</button>
-            <button className="icon-button">🛒</button>
+            <button className="icon-button" onClick={handleClick}>
+              🛒
+            </button>
             <div className="dropdown">
               <button onClick={toggleDropdown} className="user-link">
                 My Allegro
