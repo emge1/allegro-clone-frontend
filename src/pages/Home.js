@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Home.css';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const [randomProducts, setRandomProducts] = useState([]);
@@ -30,7 +31,9 @@ const Home = () => {
           {randomProducts.map((product) => (
             <div key={product.id} className="product-card">
               <img src={`${BASE_URL}${product.thumbnail}`} alt={product.name} />
-              <h3>{product.name}</h3>
+                <Link to={`/products/${product.id}`}>
+                    <h3>{product.name}</h3>
+                </Link>
               <p>{product.max_price} PLN</p>
             </div>
           ))}
@@ -43,7 +46,9 @@ const Home = () => {
           {cheapProducts.map((product) => (
             <div key={product.id} className="product-card">
               <img src={`${BASE_URL}${product.thumbnail}`} alt={product.name} />
-              <h3>{product.name}</h3>
+                <Link to={`/products/${product.id}`}>
+                    <h3>{product.name}</h3>
+                </Link>
               <p>{product.max_price} PLN</p>
             </div>
           ))}
