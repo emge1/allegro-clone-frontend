@@ -8,13 +8,43 @@ const ProductPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const handleAddToCart = () => {
-        console.log(`Added to cart: ${product.name}`);
-        alert(`${product.name} has been added to your cart!`);
+    const handleAddToCart = async () => {
+        const token = localStorage.getItem('token'); // Pobierz token użytkownika
+        if (!token) {
+            console.error("No token found. Please log in first.");
+            alert("You must be logged in to add items to the cart.");
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:8000/cart/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Token ${token}`,
+                },
+                body: JSON.stringify({
+                    product_id: product.id,
+                    quantity: 1,
+                    price: product.discount_price,
+                }),
+            });
+
+            if (response.ok) {
+                console.log(`Added to cart: ${product.name}`);
+                alert(`${product.name} has been added to your cart!`);
+            } else {
+                const errorData = await response.json();
+                console.error("Failed to add to cart:", errorData.detail);
+                alert(`Error: ${errorData.detail}`);
+            }
+        } catch (error) {
+            console.error("Error adding to cart:", error);
+            alert("An error occurred while adding the item to the cart.");
+        }
     };
 
     useEffect(() => {
-        // Funkcja pobierająca dane produktu
         const fetchProduct = async () => {
             try {
                 const response = await fetch(`http://localhost:8000/products/${id}`); // Używamy ID z API
@@ -83,7 +113,6 @@ const ProductPage = () => {
                 </ul>
             </div>
 
-            {/* About the Product */}
             <div className="product-about">
                 <h2>About the Product</h2>
                 <p>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './CartPage.css';
+import {Link} from "react-router-dom";
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -80,10 +81,12 @@ const CartPage = () => {
                 <div className="cart-items">
                     {cartItems.map((item) => (
                         <div className="cart-item" key={item.id}>
-                            <img src={item.thumbnail} alt={item.name} className="cart-item-img" />
+                            <img src={item.thumbnail} alt={item.name} className="cart-item-img"/>
                             <div className="cart-item-info">
-                                <h2>{item.name}</h2>
-                                <p>Price: {item.price.toFixed(2)} zł</p>
+                                <Link to={`/products/${item.product.id}`}>
+                                    <h2>{item.product.name}</h2>
+                                </Link>
+                                <p>Price: {parseFloat(item.price).toFixed(2)} zł</p>
                                 <p>Quantity: {item.quantity}</p>
                             </div>
                             <button className="remove-button">Remove</button>
