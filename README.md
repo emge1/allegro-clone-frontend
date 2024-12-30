@@ -14,6 +14,7 @@ functionality and simulate real-world payment processes.
   * [Features](#features)
 * [Project setup](#project-setup)
   * [Using Frontend Application](#using-the-frontend-application)
+  * [Using Docker Build and Run](#using-docker-build-and-run)
 * [Dependencies](#dependencies)
   * [Backend](#backend)
   * [Frontend](#frontend)
@@ -63,22 +64,39 @@ Make sure the backend API is running to ensure proper functionality of the front
 
 Clone the repository:
 
-```
+```bash
 git clone https://github.com/emge1/allegro-clone-frontend.git
 cd allegro-clone-frontend
 ```
 
 Install dependencies:
 
-```
+```bash
 npm install 
 ```
 
 Start the development server:
-```
+```bash
 npm start
 ```
 
+Access the application at http://localhost:3000/
+
+## Using Docker Build and Run
+
+Clone the repository:
+```bash
+git clone https://github.com/emge1/allegro-clone-frontend.git
+cd allegro-clone-frontend
+```
+Build Docker image:
+```bash
+docker build -t gui:latest .
+```
+And run Docker container:
+```bash
+docker run -p 8000:8000 gui:latest
+```
 Access the application at http://localhost:3000/
 
 # Dependencies
