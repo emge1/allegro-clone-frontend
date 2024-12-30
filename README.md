@@ -15,6 +15,7 @@ functionality and simulate real-world payment processes.
 * [Project setup](#project-setup)
   * [Using Frontend Application](#using-the-frontend-application)
   * [Using Docker Build and Run](#using-docker-build-and-run)
+  * [Using Docker Compose](#using-docker-compose)
 * [Dependencies](#dependencies)
   * [Backend](#backend)
   * [Frontend](#frontend)
@@ -98,6 +99,26 @@ And run Docker container:
 docker run -p 3000:3000 gui:latest
 ```
 Access the application at http://localhost:3000/
+
+## Using Docker Compose
+
+Clone both backend and the frontend repository:
+
+```bash
+git clone https://github.com/emge1/allegro-clone-api.git
+git clone https://github.com/emge1/allegro-clone-frontend.git
+cd allegro-clone-api
+```
+Create .env file and add the secret key:
+
+```bash
+echo "SECRET_KEY=secret_key" > .env
+```
+And run docker compose:
+```bash
+docker compose up web frontend
+```
+Access the application at http://localhost:3000/.
 
 # Dependencies
 ## Backend
