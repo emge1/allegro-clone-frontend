@@ -52,7 +52,7 @@ functionality and simulate real-world payment processes.
 * Login authentication
 * Authorization with access token
 * Display random products and the cheapest one on the home page
-* Display itmes and subcategories on a category page
+* Display items and subcategories on a category page
 * Display details of an item
 * Add an item to personal cart
 * Access to a cart only for authorized users
@@ -95,7 +95,7 @@ docker build -t gui:latest .
 ```
 And run Docker container:
 ```bash
-docker run -p 8000:8000 gui:latest
+docker run -p 3000:3000 gui:latest
 ```
 Access the application at http://localhost:3000/
 
