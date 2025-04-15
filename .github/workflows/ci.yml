@@ -1,0 +1,109 @@
+name: CI Pipeline for UI
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*.*.*'
+
+env:
+  REPO_URL: emge1/allegro-clone-frontend
+  REPO_BRANCH: main
+  DOCKER_IMAGE_NAME: ci-ui
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REPO_URL }}
+          ref: ${{ env.REPO_BRANCH }}
+
+      - name: Lint Code
+        run: echo "This step is currently in progress"
+
+      - name: Build Docker Image
+        run: docker build -t ${{ env.DOCKER_IMAGE_NAME }} .
+
+      - name: Save Docker Image
+        run: docker save ${{ env.DOCKER_IMAGE_NAME }} > ci-ui.tar
+
+      - name: Upload Docker Image
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-ui-image
+          path: ci-ui.tar
+
+  tests:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Download Docker Image
+        uses: actions/download-artifact@v4
+        with:
+          name: ci-ui-image
+
+      - name: Load Docker Image
+        run: docker load < ci-ui.tar
+
+      - name: Run Unit Tests
+        run: echo "This step is currently in progress"
+
+      - name: Upload Unit Test Report
+        run: echo "This step is currently in progress"
+
+  post-checks:
+    runs-on: ubuntu-latest
+    needs: [ tests ]
+    if: always()
+
+    steps:
+      - name: Download Docker Image
+        uses: actions/download-artifact@v4
+        with:
+          name: ci-ui-image
+
+      - name: Load Docker Image
+        run: docker load < ci-ui.tar
+
+      - name: Extract Static Files from Docker Image
+        run: |
+          docker create --name temp-ui ${{ env.DOCKER_IMAGE_NAME }}
+          docker cp temp-ui:/usr/share/nginx/html ./build
+          docker rm temp-ui
+
+      - name: Upload Static Build for CD
+        uses: actions/upload-artifact@v4
+        with:
+          name: react-ui-build
+          path: build/
+
+      #      - name: Upload Static Files to Artifact S3
+      #        run: aws s3 sync ./build s3://ci-artifacts/frontend-ui/${{ github.sha }}/
+      #        env:
+      #          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Clean up Docker
+        if: always()
+        run: |
+          docker ps -q | xargs -r docker stop || true
+          docker ps -aq | xargs -r docker rm || true
+          docker network prune -f
+
+      - name: Clean Workspace
+        if: always()
+        run: rm -rf ./*
+
+      - name: Success Message
+        if: success()
+        run: echo "Pipeline successfully completed"
+
+      - name: Failure Message
+        if: failure()
+        run: echo "Pipeline unsuccessful"
