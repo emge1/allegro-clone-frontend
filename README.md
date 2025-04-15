@@ -116,7 +116,7 @@ echo "SECRET_KEY=secret_key" > .env
 ```
 And run docker compose:
 ```bash
-docker compose up web frontend
+docker compose up web_dev frontend
 ```
 Access the application at http://localhost:3000/.
 
