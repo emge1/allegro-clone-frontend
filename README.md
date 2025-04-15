@@ -96,7 +96,7 @@ docker build -t gui:latest .
 ```
 And run Docker container:
 ```bash
-docker run -p 3000:3000 gui:latest
+docker run -p 3000:80 gui:latest
 ```
 Access the application at http://localhost:3000/
 
