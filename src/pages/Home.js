@@ -11,7 +11,7 @@ const Home = () => {
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/products')
       .then((response) => {
-        const products = response.data;
+        const products = response.data.results;
 
         const cheap = products.filter((product) => product.max_price <= 50);
 
