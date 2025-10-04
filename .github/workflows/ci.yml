@@ -19,9 +19,12 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          clean: false
+          path: frontend
 
       - name: Lint Code
-        run: echo "This step is currently in progress"
+        run: ls -a
 
       - name: Build Docker Image
         run: docker build -t ${{ env.DOCKER_IMAGE_NAME }} .
@@ -83,7 +86,7 @@ jobs:
       - name: Install test dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r frontend/requirements.txt
 
       - name: Start Selenium
         run: docker run -d -p 4444:4444 --network host --name selenium selenium/standalone-chrome
