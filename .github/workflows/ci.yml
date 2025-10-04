@@ -22,6 +22,17 @@ jobs:
           path: frontend
           clean: false
 
+      - name: Debug – verify frontend repo
+        run: |
+          echo "Current path: $(pwd)"
+          echo "Checking for frontend directory..."
+          ls -la
+          echo "Listing frontend contents if present:"
+          ls -la frontend || echo "frontend directory missing"
+          echo "Searching for requirements.txt and package.json:"
+          find . -maxdepth 3 -type f \( -name "requirements.txt" -o -name "package.json" \)
+      
+
       - name: Lint Code
         working-directory: ./frontend
         run: ls -a
