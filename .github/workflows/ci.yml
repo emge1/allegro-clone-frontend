@@ -17,6 +17,7 @@ env:
   POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
   DB_PORT: ${{ secrets.DB_PORT }}
   DB_HOST: ${{ secrets.DB_HOST }}
+  ENVIRONMENT: ${{ secrets.DB_HOST }}
 
 
 jobs:
