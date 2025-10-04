@@ -74,12 +74,6 @@ jobs:
             sleep 3
           done
 
-      - name: Check running containers
-        run: docker ps -a
-
-      - name: API logs
-        run: docker logs api-web_dev-1
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -88,10 +82,8 @@ jobs:
       - name: Install test dependencies
         working-directory: ./
         run: |
-          ls -R | grep requirements.txt
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
 
       - name: Start Selenium
         run: docker run -d -p 4444:4444 --network host --name selenium selenium/standalone-chrome
