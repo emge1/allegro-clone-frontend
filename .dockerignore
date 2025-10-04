@@ -18,6 +18,8 @@ yarn-error.log
 
 # python & selenium
 /venv
+/tests
+requirements.txt
 
 # environmental variables
 *.dev
