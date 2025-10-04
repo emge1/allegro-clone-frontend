@@ -51,7 +51,6 @@ jobs:
           name: ci-ui-image
 
       - name: Load Docker Image
-        working-directory: ./frontend
         run: docker load < ci-ui.tar
 
       - name: Checkout API repo
