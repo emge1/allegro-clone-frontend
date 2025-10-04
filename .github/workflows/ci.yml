@@ -64,14 +64,9 @@ jobs:
           repository: emge1/allegro-clone-api
           path: api
 
-      - name: Install Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-
       - name: Start API and DB
         working-directory: ./api
-        run: docker-compose up -d web_dev db_production
+        run: docker compose up -d web_dev db_production
 
       - name: Wait for API
         run: |
@@ -144,7 +139,7 @@ jobs:
       - name: Clean up Docker
         if: always()
         run: |
-          docker-compose -f api/docker-compose.yml down
+          docker compose -f api/docker-compose.yml down
           docker ps -q | xargs -r docker stop || true
           docker ps -aq | xargs -r docker rm || true
           docker network prune -f
