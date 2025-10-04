@@ -15,47 +15,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Frontend
+      - name: Checkout frontend repo
         uses: actions/checkout@v4
         with:
-          repository: emge1/allegro-clone-frontend
-          path: frontend
           clean: false
 
       - name: Debug – verify frontend repo
         run: |
           echo "Current path: $(pwd)"
-          echo "Checking for frontend directory..."
           ls -la
-          echo "Listing frontend contents if present:"
-          ls -la frontend || echo "frontend directory missing"
-          echo "Searching for requirements.txt and package.json:"
           find . -maxdepth 3 -type f \( -name "requirements.txt" -o -name "package.json" \)
-      
-
-      - name: Lint Code
-        working-directory: ./frontend
-        run: ls -a
 
       - name: Build Docker Image
-        working-directory: ./frontend
         run: docker build -t ${{ env.DOCKER_IMAGE_NAME }} .
 
       - name: Save Docker Image
-        working-directory: ./frontend
         run: docker save ${{ env.DOCKER_IMAGE_NAME }} > ci-ui.tar
 
       - name: Upload Docker Image
         uses: actions/upload-artifact@v4
         with:
           name: ci-ui-image
-          path: frontend/ci-ui.tar
+          path: ci-ui.tar
+
+      - name: Upload frontend source
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-src
+          path: .
 
   tests:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
+      - name: Download frontend source
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-src
+
       - name: Download Docker Image
         uses: actions/download-artifact@v4
         with:
@@ -64,7 +62,7 @@ jobs:
       - name: Load Docker Image
         run: docker load < ci-ui.tar
 
-      - name: Clone API repo manually
+      - name: Clone API repo
         run: git clone https://github.com/emge1/allegro-clone-api.git api
 
       - name: Start API and DB
@@ -87,14 +85,6 @@ jobs:
             sleep 3
           done
 
-      - name: Debug – check directories
-        run: |
-          echo "Current path: $(pwd)"
-          ls -a
-          echo "Checking for frontend directory:"
-          ls -a frontend || echo "frontend directory missing"
-          find . -maxdepth 3 -type f \( -name "package.json" -o -name "requirements.txt" \)
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -103,7 +93,7 @@ jobs:
       - name: Install test dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r frontend/requirements.txt
+          pip install -r requirements.txt
 
       - name: Start Selenium
         run: docker run -d -p 4444:4444 --network host --name selenium selenium/standalone-chrome
@@ -112,18 +102,16 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y allure
 
       - name: Run E2E Tests with Allure
-        working-directory: ./frontend
         run: pytest tests --alluredir=allure-results
 
       - name: Generate Allure Report
-        working-directory: ./frontend
         run: allure generate allure-results --clean -o allure-report
 
       - name: Upload Allure Report
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
-          path: frontend/allure-report/
+          path: allure-report/
 
   post-checks:
     runs-on: ubuntu-latest
@@ -158,10 +146,6 @@ jobs:
           docker ps -q | xargs -r docker stop || true
           docker ps -aq | xargs -r docker rm || true
           docker network prune -f
-
-      - name: Clean Workspace
-        if: always()
-        run: rm -rf ./*
 
       - name: Success Message
         if: success()
