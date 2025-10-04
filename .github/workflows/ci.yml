@@ -11,6 +11,13 @@ env:
   REPO_URL: emge1/allegro-clone-frontend
   REPO_BRANCH: main
   DOCKER_IMAGE_NAME: ci-ui
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+  POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+  DB_PORT: ${{ secrets.DB_PORT }}
+  DB_HOST: ${{ secrets.DB_HOST }}
+
 
 jobs:
   build:
@@ -51,11 +58,51 @@ jobs:
       - name: Load Docker Image
         run: docker load < ci-ui.tar
 
-      - name: Run Unit Tests
-        run: echo "This step is currently in progress"
+      - name: Checkout API repo
+        uses: actions/checkout@v4
+        with:
+          repository: emge1/allegro-clone-api
+          path: api
 
-      - name: Upload Unit Test Report
-        run: echo "This step is currently in progress"
+      - name: Start API and DB
+        working-directory: ./api
+        run: docker-compose up -d web_dev db_production
+
+      - name: Wait for API
+        run: |
+          for i in {1..40}; do
+            curl -s http://localhost:8000/ && break
+            echo "Waiting for API..."
+            sleep 3
+          done
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install test dependencies
+        run: pip install -r requirements.txt
+
+      - name: Start Selenium
+        run: docker run -d -p 4444:4444 --network host --name selenium selenium/standalone-chrome
+
+      - name: Install Allure CLI
+        run: sudo apt-get update && sudo apt-get install -y allure
+
+      - name: Run E2E Tests with Allure
+        run: |
+          pytest tests --alluredir=allure-results
+
+      - name: Generate Allure Report
+        run: |
+          allure generate allure-results --clean -o allure-report
+
+      - name: Upload Allure Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report/
 
   post-checks:
     runs-on: ubuntu-latest
@@ -92,6 +139,7 @@ jobs:
       - name: Clean up Docker
         if: always()
         run: |
+          docker-compose -f api/docker-compose.yml down
           docker ps -q | xargs -r docker stop || true
           docker ps -aq | xargs -r docker rm || true
           docker network prune -f
