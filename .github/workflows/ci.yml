@@ -17,14 +17,6 @@ jobs:
     steps:
       - name: Checkout frontend repo
         uses: actions/checkout@v4
-        with:
-          clean: false
-
-      - name: Debug – verify frontend repo
-        run: |
-          echo "Current path: $(pwd)"
-          ls -la
-          find . -maxdepth 3 -type f \( -name "requirements.txt" -o -name "package.json" \)
 
       - name: Build Docker Image
         run: docker build -t ${{ env.DOCKER_IMAGE_NAME }} .
@@ -32,38 +24,32 @@ jobs:
       - name: Save Docker Image
         run: docker save ${{ env.DOCKER_IMAGE_NAME }} > ci-ui.tar
 
-      - name: Upload Docker Image
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ci-ui-image
-          path: ci-ui.tar
-
-      - name: Upload frontend source
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-src
-          path: .
+          name: ci-ui
+          path: |
+            ci-ui.tar
+            .
 
   tests:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
-      - name: Download frontend source
+      - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: frontend-src
-
-      - name: Download Docker Image
-        uses: actions/download-artifact@v4
-        with:
-          name: ci-ui-image
+          name: ci-ui
 
       - name: Load Docker Image
         run: docker load < ci-ui.tar
 
       - name: Clone API repo
         run: git clone https://github.com/emge1/allegro-clone-api.git api
+
+      - name: Create test network
+        run: docker network create e2e-net || true
 
       - name: Start API and DB
         working-directory: ./api
@@ -77,11 +63,19 @@ jobs:
           DB_HOST: ${{ secrets.DB_HOST }}
           ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
 
-      - name: Wait for API
+      - name: Start UI container
+        run: |
+          docker run -d --name ui --network e2e-net -p 3000:80 ci-ui
+
+      - name: Start Selenium
+        run: |
+          docker run -d --name selenium --network e2e-net -p 4444:4444 selenium/standalone-chrome
+
+      - name: Wait for UI
         run: |
           for i in {1..40}; do
-            curl -s http://localhost:8000/ && break
-            echo "Waiting for API..."
+            curl -s http://localhost:3000/ && break
+            echo "Waiting for UI..."
             sleep 3
           done
 
@@ -95,14 +89,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Start Selenium
-        run: docker run -d -p 4444:4444 --network host --name selenium selenium/standalone-chrome
-
-      - name: Install Allure CLI
-        run: sudo apt-get update && sudo apt-get install -y allure
-
       - name: Run E2E Tests with Allure
         run: pytest tests --alluredir=allure-results
+        env:
+          BASE_URL: http://ui:80
 
       - name: Generate Allure Report
         run: allure generate allure-results --clean -o allure-report
@@ -122,14 +112,14 @@ jobs:
       - name: Download Docker Image
         uses: actions/download-artifact@v4
         with:
-          name: ci-ui-image
+          name: ci-ui
 
       - name: Load Docker Image
         run: docker load < ci-ui.tar
 
       - name: Extract Static Files from Docker Image
         run: |
-          docker create --name temp-ui ${{ env.DOCKER_IMAGE_NAME }}
+          docker create --name temp-ui ci-ui
           docker cp temp-ui:/usr/share/nginx/html ./build
           docker rm temp-ui
 
@@ -139,18 +129,13 @@ jobs:
           name: react-ui-build
           path: build/
 
-      - name: Clean up Docker
+      - name: Cleanup
         if: always()
         run: |
           docker compose -f api/docker-compose.e2e.yml down || true
-          docker ps -q | xargs -r docker stop || true
-          docker ps -aq | xargs -r docker rm || true
-          docker network prune -f
+          docker ps -aq | xargs -r docker rm -f || true
+          docker network prune -f || true
 
-      - name: Success Message
+      - name: Status
         if: success()
-        run: echo "Pipeline successfully completed"
-
-      - name: Failure Message
-        if: failure()
-        run: echo "Pipeline unsuccessful"
+        run: echo "Pipeline OK"
