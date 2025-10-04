@@ -80,6 +80,17 @@ jobs:
             sleep 3
           done
 
+      - name: Debug – check directories
+        run: |
+          echo "Current path: $(pwd)"
+          echo "Listing top-level files:"
+          ls -a
+          echo "Checking for frontend directory:"
+          ls -a frontend || echo "frontend directory missing"
+          echo "Recursively search for package.json and requirements.txt:"
+          find . -maxdepth 3 -type f \( -name "package.json" -o -name "requirements.txt" \)
+          
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
