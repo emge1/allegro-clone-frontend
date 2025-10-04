@@ -51,6 +51,7 @@ jobs:
       - name: Checkout API repo
         uses: actions/checkout@v4
         with:
+          clean: false
           repository: emge1/allegro-clone-api
           path: api
 
@@ -80,7 +81,6 @@ jobs:
           python-version: '3.11'
 
       - name: Install test dependencies
-        working-directory: ./home/runner/work/allegro-clone-frontend/allegro-clone-frontend
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
