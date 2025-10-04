@@ -76,6 +76,9 @@ jobs:
             sleep 3
           done
 
+      - name: Check running containers
+        run: docker ps -a
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
