@@ -8,7 +8,7 @@ on:
       - 'v*.*.*'
 
 env:
-  DOCKER_IMAGE_NAME: ci-ui
+  DOCKER_IMAGE_NAME: ui
 
 jobs:
   build:
@@ -22,15 +22,13 @@ jobs:
         run: docker build -t ${{ env.DOCKER_IMAGE_NAME }} .
 
       - name: Save Docker Image
-        run: docker save ${{ env.DOCKER_IMAGE_NAME }} > ci-ui.tar
+        run: docker save ${{ env.DOCKER_IMAGE_NAME }} > ui.tar
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ci-ui
-          path: |
-            ci-ui.tar
-            .
+          name: ui
+          path: ui.tar
 
   tests:
     runs-on: ubuntu-latest
@@ -40,17 +38,19 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: ci-ui
+          name: ui
 
       - name: Load Docker Image
-        run: docker load < ci-ui.tar
+        run: docker load < ui.tar
 
       - name: Clone API repo
         run: git clone https://github.com/emge1/allegro-clone-api.git api
 
       - name: Start API and DB
         working-directory: ./api
-        run: docker compose -f docker-compose.e2e.yml up -d web_dev db_production
+        run: |
+          docker network create app-network
+          docker compose -f docker-compose.e2e.yml up -d web_dev db_production
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
@@ -78,7 +78,7 @@ jobs:
 
       - name: Start UI container
         run: |
-          docker run -d --name ci-ui --network ${{ steps.get_network.outputs.network }} -p 3000:80 ci-ui
+          docker run -d --name ui --network ${{ steps.get_network.outputs.network }} -p 3000:80 ui
 
       - name: Start Selenium
         run: |
@@ -105,7 +105,7 @@ jobs:
       - name: Run E2E Tests with Allure
         run: pytest tests --alluredir=allure-results
         env:
-          BASE_URL: http://ci-ui:80
+          BASE_URL: http://ui:80
 
       - name: Generate Allure Report
         run: allure generate allure-results --clean -o allure-report
