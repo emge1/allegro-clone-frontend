@@ -17,7 +17,7 @@ env:
   POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
   DB_PORT: ${{ secrets.DB_PORT }}
   DB_HOST: ${{ secrets.DB_HOST }}
-  ENVIRONMENT: ${{ secrets.DB_HOST }}
+  ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
 
 
 jobs:
@@ -89,7 +89,10 @@ jobs:
           python-version: '3.11'
 
       - name: Install test dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pwd
+          ls -R
+          pip install -r requirements.txt
 
       - name: Start Selenium
         run: docker run -d -p 4444:4444 --network host --name selenium selenium/standalone-chrome
