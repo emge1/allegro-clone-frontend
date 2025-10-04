@@ -11,14 +11,6 @@ env:
   REPO_URL: emge1/allegro-clone-frontend
   REPO_BRANCH: main
   DOCKER_IMAGE_NAME: ci-ui
-  SECRET_KEY: ${{ secrets.SECRET_KEY }}
-  POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-  POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-  DB_PORT: ${{ secrets.DB_PORT }}
-  DB_HOST: ${{ secrets.DB_HOST }}
-  ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
-
 
 jobs:
   build:
@@ -68,6 +60,14 @@ jobs:
       - name: Start API and DB
         working-directory: ./api
         run: docker compose -f docker-compose.e2e.yml up -d web_dev db_production
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
 
       - name: Wait for API
         run: |
